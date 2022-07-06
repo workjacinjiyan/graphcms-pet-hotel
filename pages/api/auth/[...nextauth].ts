@@ -2,9 +2,14 @@ import NextAuth from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import Twitter from 'next-auth/providers/twitter';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import {
+  CreateNextUserByEmail,
+  GetUserByEmail,
+} from '../../../lib/queries/user';
+import { hash, compare } from 'bcrypt';
+import client from '../../../lib/client';
 
 export default NextAuth({
-  // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
       name: 'Email and Password',
@@ -12,7 +17,7 @@ export default NextAuth({
         email: {
           label: 'Email',
           type: 'email',
-          placeholder: 'jamie@graphcms.com',
+          placeholder: 'johndoe@example.com',
         },
         password: {
           label: 'Password',
@@ -20,7 +25,43 @@ export default NextAuth({
           placeholder: 'Password',
         },
       },
-      authorize: (credentials,req)=>{return null}
+      // @ts-ignore
+      authorize: async ({ email, password }, req) => {
+        try {
+          console.log(email, password);
+
+          const { user } = await client.request(GetUserByEmail, {
+            email,
+          });
+
+          if (!user) {
+            const { newUser } = await client.request(CreateNextUserByEmail, {
+              email,
+              password: await hash(password, 12),
+            });
+
+            return {
+              id: newUser.id,
+              username: email,
+              email,
+            };
+          }
+
+          const isValid = await compare(password, user.password);
+
+          if (!isValid) {
+            throw new Error('Wrong credentials. Try again.');
+          }
+
+          return {
+            id: user.id,
+            username: email,
+            email,
+          };
+        } catch (error) {
+          console.log(error);
+        }
+      },
     }),
     GithubProvider({
       clientId: process.env.GITHUB_ID,
