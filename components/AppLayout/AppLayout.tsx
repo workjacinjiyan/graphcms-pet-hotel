@@ -6,6 +6,7 @@ import {
   VideoCameraOutlined,
 } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import styles from './AppLayout.module.css';
 
@@ -19,12 +20,20 @@ const menuItems = [
   {
     key: '1',
     icon: <UserOutlined />,
-    label: 'Home',
+    label: (
+      <Link href={'/'}>
+        <a>Home</a>
+      </Link>
+    ),
   },
   {
     key: '2',
     icon: <VideoCameraOutlined />,
-    label: 'Users',
+    label: (
+      <Link href={'/users'}>
+        <a>Users</a>
+      </Link>
+    ),
   },
   {
     key: '3',
