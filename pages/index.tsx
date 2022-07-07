@@ -1,14 +1,14 @@
 import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css';
 import Link from 'next/link';
 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { Row, Col, Card } from 'antd';
 
 const Home: NextPage = () => {
   const { data: session, status } = useSession();
 
   return (
-    <div className={styles.container}>
+    <div className={''}>
       {status === 'unauthenticated' && (
         <>
           <p>Not signed in</p>

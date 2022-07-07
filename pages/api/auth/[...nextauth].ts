@@ -3,7 +3,7 @@ import GithubProvider from 'next-auth/providers/github';
 import Twitter from 'next-auth/providers/twitter';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import {
-  CreateNextUserByEmail,
+  CreateAppUserByEmail,
   GetUserByEmail,
 } from '../../../lib/queries/user';
 import { hash, compare } from 'bcrypt';
@@ -35,14 +35,13 @@ export default NextAuth({
           });
 
           if (!user) {
-            const { newUser } = await client.request(CreateNextUserByEmail, {
+            const { newUser } = await client.request(CreateAppUserByEmail, {
               email,
               password: await hash(password, 12),
             });
 
             return {
               id: newUser.id,
-              username: email,
               email,
             };
           }
