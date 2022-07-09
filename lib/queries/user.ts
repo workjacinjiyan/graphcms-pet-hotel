@@ -2,7 +2,7 @@ import { gql } from 'graphql-request';
 
 export const GetAllUsers = gql`
   query getAllUsers {
-    allUsers: appUsers {
+    allUsers: appUsers(stage: DRAFT) {
       id
       slug
       createdAt
@@ -28,8 +28,15 @@ export const GetUserByEmail = gql`
 
 export const GetUserBySlug = gql`
   query getUserBySlug($slug: String!) {
-    userBySlug: appUser(where: { slug: $slug }) {
+    user: appUser(where: { slug: $slug }, stage: DRAFT) {
       id
+      email
+      firstName
+      avatar {
+        url
+      }
+      createdAt
+      updatedAt
     }
   }
 `;

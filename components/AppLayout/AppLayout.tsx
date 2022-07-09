@@ -18,19 +18,10 @@ interface IAppLayout {
 
 const menuItems = [
   {
-    key: '1',
-    icon: <UserOutlined />,
-    label: (
-      <Link href={'/'}>
-        <a>Home</a>
-      </Link>
-    ),
-  },
-  {
     key: '2',
     icon: <VideoCameraOutlined />,
     label: (
-      <Link href={'/users'}>
+      <Link href={'/user'}>
         <a>Users</a>
       </Link>
     ),
@@ -44,6 +35,15 @@ const menuItems = [
     key: '4',
     icon: <UploadOutlined />,
     label: 'Settings',
+  },
+  {
+    key: '5',
+    icon: <UploadOutlined />,
+    label: (
+      <Link href={'/'}>
+        <a>Bookings</a>
+      </Link>
+    ),
   },
 ];
 
